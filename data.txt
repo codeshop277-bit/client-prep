@@ -1,0 +1,1 @@
+**Approach:** Rotational learning — cover Python, GenAI/RAG, agents, and backend/system design every day. Week 2 revisits the same areas at a deeper, production-focused level.
