@@ -71,3 +71,4 @@ if __name__ == "__main__":
 # I/O readiness callback: Notifies the event loop that a socket can make progress, such as reading available bytes.
 # Protocol/client handling: The HTTP library interprets the bytes, manages the HTTP response, and determines when the request completes. Some of this handling is callback-driven; exact internals depend on the client and event-loop implementation.
 # Task wake-up callback: Once the awaited operation completes, asyncio schedules the suspended task to resume. Internally, task stepping advances the coroutine from the await point.
+

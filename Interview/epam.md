@@ -221,3 +221,57 @@ The typical message lifecycle is:
 5. Acknowledgment (ACK): Confirms successful processing so the broker can mark the message as handled.
 6. Retry or dead-letter queue (DLQ): Handles messages that repeatedly fail, according to the broker's configuration.
 Common brokers, Rabbitmq, kafka, amazon sqs, redis
+
+
+Multithreading
+I/O-bound
+Use when your application performs blocking API calls, file operations, or synchronous database queries. Multiple threads can wait on different operations concurrently.
+
+Multiprocessing
+CPU-bound
+Use for CPU-intensive work such as large calculations, image processing, or data transformations that can run independently across CPU cores.
+
+Asyncio
+I/O-bound
+Use for many concurrent network requests, asynchronous database calls, WebSockets, or high-concurrency API services using compatible async libraries.
+
+Lock
+Synchronization
+Use when multiple threads or processes may modify the same shared state or resource and the operation must be protected against concurrent access.
+
+2. Multithreading
+What is it?
+Multithreading allows multiple threads to run within the same process. Threads share the process's memory, including objects and global variables.
+In standard CPython builds, the Global Interpreter Lock (GIL) generally prevents multiple threads from executing Python bytecode simultaneously. Threads are still effective for I/O-bound work because they can wait for network or disk operations while other threads run.
+
+```python
+  with ThreadPoolExecutor(max_workers=3) as executor:
+        results = list(executor.map(fetch_url, urls))
+        ```
+
+Multiprocessing
+What is it?
+Multiprocessing creates separate operating-system processes. Each process has its own Python interpreter and memory space.
+Unlike standard GIL-constrained multithreading, separate processes can execute Python CPU-intensive code on multiple CPU cores in parallel
+
+```python
+
+    with ProcessPoolExecutor(max_workers=4) as executor:
+        results = list(executor.map(calculate_sum, workloads))
+        ```
+
+Asyncio
+What is it?
+asyncio uses an event loop to manage coroutines. When one coroutine waits for asynchronous I/O, the event loop can run another ready coroutine.
+Unlike multithreading, asyncio typically uses one event-loop thread. It does not require a separate thread for every concurrent request.
+
+1. asyncio.run() starts the event loop.
+2. asyncio.gather() schedules the coroutines for concurrent execution.
+3. Each coroutine initiates an HTTP request and suspends when it needs to wait for I/O.
+4. Other ready coroutines can run while requests are pending.
+5. Once all results are available, gather() returns them.
+
+Lock — preventing race conditions
+What is a race condition?
+Suppose two threads increment the same counter. Both read the old value before either writes the updated value. One update may be lost.
+A lock ensures that only one thread at a time enters a protected critical section.
